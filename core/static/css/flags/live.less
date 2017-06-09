@@ -1,0 +1,48 @@
+@import "../imports/vars";
+
+.jwplayer.jw-flag-live {
+
+    .jw-display-icon-rewind {
+      display: none;
+    }
+
+    .jw-controlbar {
+        .jw-text-elapsed,
+        .jw-text-duration,
+        .jw-slider-time {
+            display: none;
+        }
+        .jw-text-alt {
+            display: inline-block;
+            height: auto;
+            line-height: @controlbar-height;
+            margin: 0 -0.5em 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    }
+
+    &.jw-flag-time-slider-above {
+
+      .jw-controlbar {
+
+        .jw-text-alt {
+          margin: 0;
+        }
+
+        .jw-group {
+
+          > .jw-text {
+            height: @mobile-touch-target;
+            line-height: @mobile-touch-target - 2px;
+          }
+
+        }
+
+      }
+
+    }
+
+}

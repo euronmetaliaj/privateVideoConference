@@ -1,0 +1,37 @@
+{% extends "base_template.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block content %}
+    <div class="register-box-body">
+        <p class="login-box-msg">Register a new Group</p>
+        <form method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group has-feedback">
+                {{ render_field(form.name,class='form-control',id='inputName',placeholder='Full name') }}
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    {{ render_field(form.submit,class='btn btn-primary btn-block btn-flat',value='Register') }}
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+        <div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <label class="label-warning-light">{{ message }}</label>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+        </div>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,128 @@
+@import "vars";
+
+// Preview Image
+
+.jw-click {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.jw-preview {
+    position: absolute;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    width: 100%;
+    height: 100%;
+    background: #000 no-repeat 50% 50%;
+}
+
+.jwplayer,
+.jw-error,
+.jw-stretch-uniform {
+    .jw-preview {
+        background-size: contain;
+    }
+}
+
+.jw-stretch-none {
+    .jw-preview {
+        background-size: auto auto;
+    }
+}
+
+.jw-stretch-fill {
+    .jw-preview {
+        background-size: cover;
+    }
+}
+
+.jw-stretch-exactfit {
+    .jw-preview {
+        background-size: 100% 100%;
+    }
+}
+
+/*
+
+display icons
+
+*/
+
+.jw-display {
+
+  display: table;
+  height: 100%;
+  padding-bottom: @controlbar-height;
+  position: relative;
+  width: 100%;
+
+  .jw-flag-dragging & {
+    display: none;
+  }
+
+  .jw-state-idle:not(.jw-flag-cast-available) & {
+    padding: 0;
+  }
+
+}
+
+.jw-display-container {
+  display: table-cell;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.jw-display-controls {
+  display: inline-block;
+}
+
+.jw-display-icon-container {
+  background-color: @display-bkgd-color;
+  border-radius: @ui-corner-round;
+  display: inline-block;
+  margin: 0 (@ui-padding * 0.5);
+
+  .jw-icon {
+    color: @display-icon-color;
+    cursor: pointer;
+    height: @mobile-touch-target;
+    line-height: @mobile-touch-target;
+    text-align: center;
+    width: @mobile-touch-target;
+
+    &::before {
+      font-size: @mobile-touch-target * 0.5;
+      position: relative;
+    }
+
+    &.jw-icon-rewind::before {
+      top: 2px;
+      padding: 0.2em 0.05em 0.1em;
+    }
+
+    .jw-state-idle &.jw-icon-display::before,
+    .jw-state-paused &.jw-icon-display::before {
+      left: 1px;
+    }
+
+  }
+
+  &:hover {
+    background: @display-bkgd-hover-color;
+
+    .jw-icon {
+      color: @display-icon-hover-color;
+    }
+
+  }
+
+}
+
+// hide next and rewind buttons on extra small player
+.jw-breakpoint-0 .jw-display-icon-next,
+.jw-breakpoint-0 .jw-display-icon-rewind {
+  display: none;
+}

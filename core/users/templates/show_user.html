@@ -1,0 +1,46 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+    <!-- Profile Image -->
+    <div class="box box-primary">
+        <div class="box-body box-profile">
+            <h3 class="profile-username text-center">{{ user.name }}</h3>
+            <a href="{{ url_for("users.toggle_activation", id = user.id) }}">
+                <button class="btn-circle">
+                    {% if user.active %}
+                        Deactivate
+                    {% else %}
+                        Activate
+                    {% endif %}
+                </button>
+            </a>
+
+            <p class="text-muted text-center">{{ user.phone }}</p>
+            <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                    <b>Username</b> <a class="pull-right">{{ user.username }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Email</b> <a class="pull-right">{{ user.email }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Phone</b> <a class="pull-right">{{ user.phone }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Ip Address</b> <a class="pull-right">{{ user.ip_address }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Part of these Groups</b>
+                    <ul>
+                        {% for i in user_groups %}
+                             <li>{{ i.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+{% endblock %}

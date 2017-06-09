@@ -1,0 +1,34 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+    <!-- Profile Image -->
+    <div class="box box-primary">
+        <div class="box-body box-profile">
+            <h3 class="profile-username text-center">{{ user.name }}</h3>
+            <p class="text-muted text-center">{{ user.phone }}</p>
+            <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                    <b>Username</b> <a class="pull-right">{{ user.username }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Password</b> <a class="pull-right">{{ user.password }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Email</b> <a class="pull-right">{{ user.email }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Phone</b> <a class="pull-right">{{ user.phone }}</a>
+                </li>
+                <li class="list-group-item">
+                    <b>Ip Address</b> <a class="pull-right">{{ user.ip_address }}</a>
+                </li>
+                <div class="alert alert-info">
+                    <p>Please make sure you print this page because you can't get the password of this user anymore</p>
+                </div>
+            </ul>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+{% endblock %}

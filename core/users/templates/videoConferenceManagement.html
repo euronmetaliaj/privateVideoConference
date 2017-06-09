@@ -1,0 +1,45 @@
+{% extends "base_template.html" %}
+{% block name_of_content %}
+    Video Conferences
+{% endblock %}
+{% block sub_name_of_content %}
+    Manages Conferences
+{% endblock %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div>
+            <a href="{{ url_for("users.register_conference") }}">
+                <button class="button btn-app bg-green-active">Add Conference</button>
+            </a>
+        </div>
+        <div class="row">
+            {% for conference in conferences %}
+                <div class="col-lg-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green ">
+                        <div class="inner" style="text-decoration-color: black;">
+                            <p>Conference : {{ conference.name }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person"></i>
+                        </div>
+{#                        <a href="{{ url_for("conference.deleteGroup", id = group.id) }}">#}
+{#                            <button class="btn-circle">#}
+{#                                Remove Conference#}
+{#                            </button>#}
+{#                        </a>#}
+{#                        <a href="{{ url_for("conference.suspendConference", id = group.id) }}">#}
+{#                            <button class="btn-circle">#}
+{#                                Suspend Conference#}
+{#                            </button>#}
+{#                        </a>#}
+                        <a href="{{ url_for("users.displayConference", conference = conference.id) }}"
+                           class="small-box-footer bg-green-gradient">Members Management <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

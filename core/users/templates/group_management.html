@@ -1,0 +1,40 @@
+{% extends "base_template.html" %}
+{% block name_of_content %}
+    User Management
+{% endblock %}
+{% block sub_name_of_content %}
+    Manages Conference Groups
+{% endblock %}
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div>
+            <a href="{{ url_for("users.registerGroup") }}">
+                <button class="button btn-app bg-green-active">Add Group</button>
+            </a>
+        </div>
+        <div class="row">
+            {% for group in groups %}
+                <div class="col-lg-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green ">
+                        <div class="inner" style="text-decoration-color: black;">
+                            <p>Group : {{ group.name }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person"></i>
+                        </div>
+                        <a href="{{ url_for("users.deleteGroup", id = group.id) }}">
+                            <button class="btn-circle">
+                                Remove Group
+                            </button>
+                        </a>
+                        <a href="{{ url_for("users.memberManagement", id = group.id) }}"
+                           class="small-box-footer bg-green-gradient">Members Management <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

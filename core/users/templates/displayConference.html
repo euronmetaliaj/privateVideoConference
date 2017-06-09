@@ -1,0 +1,261 @@
+{% extends "base_template.html" %}
+{% block end_scripts %}
+    {{ super() }}
+
+    <script src="http://kendo.cdn.telerik.com/2016.3.1118/js/kendo.all.min.js"></script>
+
+    <script>
+        var sampleData = [
+                    {% for user in conference.get_all_users_json() %}
+                        {
+                            UserId: "{{ user.id }}",
+                            UserName: "{{ user.name }}",
+                            State: "Online",
+                            Location: "SFasfasfa"
+                        }
+                        {% if not loop.last %}
+                            ,
+                        {% endif %}
+                    {% endfor %}
+                ]
+                ;
+
+        // custom logic start
+
+
+        function getIndexById(id) {
+            var idx,
+                    l = sampleData.length;
+
+            for (var j = 0; j < l; j++) {
+                if (sampleData[j].ProductID == id) {
+                    return j;
+                }
+            }
+            return null;
+        }
+
+        // custom logic end
+
+        $(document).ready(function () {
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: function (e) {
+                        // on success
+                        e.success(sampleData);
+                        // on failure
+                        //e.error("XHR response", "status code", "error message");
+                    },
+                    destroy: function (e) {
+                        // locate item in original datasource and remove it
+                        sampleData.splice(getIndexById(e.data.UserId), 1);
+                        // on success
+                        $.post("{{ url_for('users.unregister_user_from_group') }}", {
+                            user_id: e.data.UserId,
+                            group_id:"{{conference.id}}"
+                        });
+
+                        // on failure
+                        //e.error("XHR response", "status code", "error message");
+                    }
+                },
+                error: function (e) {
+                    // handle data operation error
+                    alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+                },
+                pageSize: 10,
+                batch: false,
+                schema: {
+                    model: {
+                        id: "UserId",
+                        fields: {
+                            UserId: {editable: false, nullable: true},
+                            UserName: {editable: false, nullable: true},
+                            State: {editable: false, validation: {required: true}},
+                            Location: {editable: false, validation: {required: true}}
+                        }
+                    }
+                }
+            });
+
+            var onDataBound = function () {
+                $('td').each(function () {
+                    if ($(this).text() == 'Online') {
+                        $(this).parent().addClass('bg-green external-event')
+                    }
+                });
+                $('td').each(function () {
+                    if ($(this).text() == 'Offline') {
+                        $(this).parent().addClass('bg-red external-event')
+                    }
+                });
+            };
+
+            $("#grid").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                dataBound: onDataBound,
+                columns: [
+                    {field: "UserName", title: "Name", width: "200px"},
+                    {field: "State", title: "State"},
+                    {field: "Location", title: "Location"},
+                    {command: ["destroy"], title: "&nbsp;", width: "200px"}
+                ],
+                editable: "inline"
+            });
+        });
+    </script>
+
+
+    {#    <script type="text/javascript" language="javascript">#}
+    {#        jwplayer("player").setup({#}
+    {#            file: "rtmp://192.168.100.136/live/mystream",#}
+    {#            logo: {#}
+    {#                hide: true,#}
+    {#            },#}
+    {#            "autostart": false,#}
+    {#            width: "100%",#}
+    {#            aspectratio: "16:6"#}
+    {#        });#}
+    {#        jwplayer().onDisplayClick(function () {#}
+    {#            jwplayer();#}
+    {#        });#}
+    {#        $('#minus_sign').onclick(function () {#}
+    {#            jwplayer.stop();#}
+    {#        })#}
+    {#    </script>#}
+    <link href="http://vjs.zencdn.net/5.8/video-js.min.css" rel="stylesheet">
+    <script src="http://vjs.zencdn.net/5.8/video.min.js"></script>
+    <script>
+        var player = videojs('#player');
+    </script>
+
+{% endblock %}
+{% block  add_css %}
+
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.common-material.min.css"/>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.min.css"/>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
+
+{% endblock %}
+{% block content %}
+
+    <div class="box box-solid ">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
+            <i class="fa fa-th"></i>
+
+            <h3 class="box-title">Control Panel</h3>
+
+            {#            <div class="box-tools pull-right">#}
+            {#                <button type="button" class="btn bg-teal btn-sm" id='minus_sign' data-widget="collapse"><i#}
+            {#                        class="fa fa-minus"></i>#}
+            {#                </button>#}
+            {#                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>#}
+            {#                </button>#}
+            {#            </div>#}
+            <div class="box-body">
+                <a class="btn btn-app">
+                    <i class="fa fa-hand-paper-o"></i> Suspend Conference
+                </a>
+                <a class="btn btn-app">
+                    <i class="fa fa-bolt "></i> Delete Conference
+                </a>
+                <a class="btn btn-app">
+                    <i class="fa fa-play"></i> Play
+                </a>
+                <a class="btn btn-app">
+                    <i class="fa fa-pause"></i> Pause
+                </a>
+                <a class="btn btn-app">
+                    <i class=" fa fa-floppy-o "></i> Save to Disk
+                </a>
+            </div>
+        </div>
+        <div class="box-body border-radius-none">
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer no-border">
+            <div class="row">
+                <!-- ./col -->
+
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.box-footer -->
+    </div>
+    <div class="box box-solid ">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
+            <i class="fa fa-th"></i>
+
+            <h3 class="box-title">Allowed Users</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn bg-teal btn-sm" id='minus_sign' data-widget="collapse"><i
+                        class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="box-body">
+                <div id="grid"></div>
+            </div>
+        </div>
+        <div class="box-body border-radius-none">
+
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer no-border">
+            <div class="row">
+                <!-- ./col -->
+
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.box-footer -->
+    </div>
+
+    <div class="box box-solid collapsed-box">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
+            <i class="fa fa-th"></i>
+
+            <h3 class="box-title">Video Conference</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn bg-teal btn-sm" id='minus_sign' data-widget="collapse"><i
+                        class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body border-radius-none">
+            {#            <div id="player" style="display:table;margin: 0 auto;"></div>#}
+            <video id="player" class="video-js vjs-default-skin" height="360" width="640" controls preload="none">
+                <source src="rtmp://192.168.1.19:1935/vod2/four.mp4" type='rtmp/mp4'/>
+            </video>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer no-border">
+            <div class="row">
+                <!-- ./col -->
+                <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                    <div style="display:inline;width:60px;height:60px;">
+                        <canvas width="60" height="60"></canvas>
+                        <input class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                               data-fgcolor="#39CCCC" readonly="readonly"
+                               style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px none; background: transparent none repeat scroll 0% 0%; font: bold 12px Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px;"
+                               type="text"></div>
+
+                    <div class="knob-label">Online</div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.box-footer -->
+    </div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base_template.html" %}
+{% block name_of_content %}
+    User Managment
+{% endblock %}
+{% block sub_name_of_content %}
+    Manages Users
+{% endblock %}
+{% block content %}
+    <!-- Main content -->
+
+    <section class="content">
+        <div>
+            <a href="{{ url_for("users.register") }}">
+                <button class="button btn-app bg-green-active">Add User</button>
+            </a>
+        </div>
+        <hr/>
+        <div class="row">
+            {% for user in users %}
+                {% if user.name %}
+                    <div class="col-lg-3 col-xs-1">
+                        <!-- small box -->
+                        <div class="small-box bg-gray ">
+                            <div class="inner" style="text-decoration-color: black;">
+                                <p>Name : {{ user.name }}</p>
+                            </div>
+                            <a href="{{ url_for("users.toggle_activation", id = user.id) }}">
+                                <button class="btn-circle">
+                                    {% if user.active %}
+                                        Deactivate
+                                    {% else %}
+                                        Activate
+                                    {% endif %}
+                                </button>
+
+                            </a>
+                            <a href="{{ url_for("users.deleteUser", id = user.id) }}">
+                                <button class="btn-circle">
+                                    Remove User
+                                </button>
+                            </a>
+                            <div class="icon">
+                                <i class="ion ion-person"></i>
+                            </div>
+                            <a href="{{ url_for("users.show_user", id = user.id) }}"
+                               class="small-box-footer {% if user.active %}bg-green-gradient{% else %}bg-red-gradient{% endif %}">Profile
+                                Details <i
+                                        class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

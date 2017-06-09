@@ -1,0 +1,22 @@
+@import "../imports/icons";
+
+.jwplayer.jw-state-playing {
+
+  &:not(.jw-flag-touch):not(.jw-breakpoint-0):not(.jw-breakpoint-1) {
+    .jw-display {
+      display: none;
+    }
+  }
+
+  .jw-display .jw-icon-display,
+  .jw-icon-playback {
+    .jw-icon-pause;
+  }
+
+  &.jw-flag-user-inactive {
+    .jw-display {
+      display: none;
+    }
+  }
+
+}

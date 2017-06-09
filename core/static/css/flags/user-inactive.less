@@ -1,0 +1,18 @@
+@import "controls-hidden";
+
+.jwplayer.jw-flag-user-inactive.jw-state-playing {
+    .jwplayer.jw-flag-controls-hidden;
+
+    .jw-media {
+        cursor: none;
+        -webkit-cursor-visibility: auto-hide;
+    }
+}
+.jwplayer.jw-flag-user-inactive.jw-state-buffering {
+    .jw-controlbar {
+        display: none;
+    }
+    .jw-nextup-container {
+        bottom: 0.5em;
+    }
+}

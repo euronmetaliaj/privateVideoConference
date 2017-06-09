@@ -1,0 +1,146 @@
+{% extends "base_template.html" %}
+{% block  add_css %}
+
+    <link href="{{ url_for('static', filename='css/multi-select.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.common-material.min.css"/>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.min.css"/>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.3.1118/styles/kendo.material.mobile.min.css"/>
+
+{% endblock %}
+
+{% block content %}
+    <div class="user-block">
+        <form method="post" action="{{ url_for("users.groupChanges") }}">
+            <div class="user-panel">
+                <input name="group_id" type="hidden" value="{{ group_id }}">
+                <div class="form-group">
+                    <label for="inputID" class="col-sm-2 control-label">Add Members :</label>
+                    <div class="col-sm-10">
+                        <select id="add_members" name='add_members' multiple="multiple"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputID" class="col-sm-2 control-label">Remove Members :</label>
+                    <div class="col-sm-10">
+                        <select id="remove_members" name='remove_members' multiple="multiple"></select>
+                    </div>
+                </div>
+
+            </div>
+            <button class="btn-app" type="submit"> Finish Changes</button>
+        </form>
+
+        <body class="gray-bg">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <div id="fadeout" class="alert alert-success">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+    </div>
+
+
+{% endblock %}
+
+{% block  add_scripts %}
+    <script src="{{ url_for('static', filename='js/jquery.multi-select.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.quicksearch.js') }}"></script>
+
+    <script src="http://kendo.cdn.telerik.com/2016.3.1118/js/jquery.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2016.3.1118/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#add_members").kendoMultiSelect({
+                placeholder: "Select Members...",
+                dataTextField: "Name",
+                dataValueField: "id",
+                autoBind: false,
+                dataSource: {
+                    data: [
+
+                        {% for user in not_members %}
+                            {
+                                Name: "{{ user.name }}",
+                                id: "{{ user.id }}"
+                            }
+                            {% if not loop.last %}
+                                ,
+                            {% endif %}
+                        {% endfor %}
+
+
+                    ]
+                }
+            });
+            $("#remove_members").kendoMultiSelect({
+                placeholder: "Select Members...",
+                dataTextField: "Name",
+                dataValueField: "id",
+                autoBind: false,
+                dataSource: {
+                    data: [
+
+                        {% for user in members %}
+                            {
+                                Name: "{{ user.name }}",
+                                id: "{{ user.id }}"
+                            }
+                            {% if not loop.last %}
+                                ,
+                            {% endif %}
+                        {% endfor %}
+                    ]
+                }
+            });
+        });
+        setTimeout(function () {
+            $('#fadeout').fadeOut()
+        }, 1000);
+    </script>
+
+    {#    <script>#}
+    {#        $('.searchable').multiSelect({#}
+    {#            selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search by Name'>",#}
+    {#            selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Search by Name'>",#}
+    {#            afterInit: function (ms) {#}
+    {#                var that = this,#}
+    {#                        $selectableSearch = that.$selectableUl.prev(),#}
+    {#                        $selectionSearch = that.$selectionUl.prev(),#}
+    {#                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',#}
+    {#                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';#}
+    {##}
+    {#                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)#}
+    {#                        .on('keydown', function (e) {#}
+    {#                            if (e.which === 40) {#}
+    {#                                that.$selectableUl.focus();#}
+    {#                                return false;#}
+    {#                            }#}
+    {#                        });#}
+    {##}
+    {#                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)#}
+    {#                        .on('keydown', function (e) {#}
+    {#                            if (e.which == 40) {#}
+    {#                                that.$selectionUl.focus();#}
+    {#                                return false;#}
+    {#                            }#}
+    {#                        });#}
+    {#            },#}
+    {#            afterSelect: function () {#}
+    {#                this.qs1.cache();#}
+    {#                this.qs2.cache();#}
+    {#            },#}
+    {#            afterDeselect: function () {#}
+    {#                this.qs1.cache();#}
+    {#                this.qs2.cache();#}
+    {#            }#}
+    {#        });#}
+    {##}
+    {##}
+    {#    </script>#}
+{% endblock %}
