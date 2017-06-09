@@ -1,4 +1,4 @@
-# privateVideoConference
+# Private Video Conference Software ( PVCS ) 
 Nginx + Flask + Mongo [ Video Conference Application , that manages you to have a ip based services with as many audience as possible ] It is like skype but with a lot of users. 
 
 Here it is used an application written in Flask + Mongo to manage an Online Video Call Conference Web application. 
